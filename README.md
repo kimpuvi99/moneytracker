@@ -1,5 +1,5 @@
 # moneytracker
-This is a simple flutter to track your incomes and expenses. I'll keep developing it to add more advanced features!
+This is a simple flutter APP to track your incomes and expenses. I'll keep developing it to add more advanced features!
 
 ![Home_Page_Overview](https://github.com/user-attachments/assets/93d3a9c5-aa56-4a74-ab16-eb566e60b6ac)
 ![Add_Income_Transaction](https://github.com/user-attachments/assets/11f92341-fd3d-4e01-8b25-84fa4145bc41)
