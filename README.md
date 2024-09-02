@@ -1,7 +1,15 @@
 # moneytracker
-This is a simple flutter APP to track your incomes and expenses. I'll keep developing it to add more advanced features!
-
-![Home_Page_Overview](https://github.com/user-attachments/assets/93d3a9c5-aa56-4a74-ab16-eb566e60b6ac)
-![Add_Income_Transaction](https://github.com/user-attachments/assets/11f92341-fd3d-4e01-8b25-84fa4145bc41)
-![Add_Expense_Transaction](https://github.com/user-attachments/assets/373edf0d-0931-4563-ba40-a4c8db0b1f14)
-
+This is a simple flutter APP to track your incomes and expenses.
+The APP is divided in two pages:
+  - Overview: Where you can see your total balance, total incomes, total expenses and every single transaction you have added.
+  - Add Transaction: By clicking on the (+) button in the Overview page, you can add your transactions specifying if it is an income or an expense, the amount and a description.
+![Overview](https://github.com/user-attachments/assets/3fc7b550-5057-41e6-ab9c-677a306088c6)
+I'll keep developing the APP to add more advanced features such as:
+  - Creating the APP icon and name.
+  - The option to edit or delete transactions.
+  - Adding dates to the transactions so you can see your incomes/expenses by date (daily, weekly, monthly, yearly and total).
+  - Allow the user to create categories to classify each transaction.
+  - Implementing graphs to have a visual view of how your money is distributed.
+  - A sing in page where you can register or sing in with your google account.
+  - Export to Excel feature.
+  - Launching on PlayStore.
