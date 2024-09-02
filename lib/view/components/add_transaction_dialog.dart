@@ -90,10 +90,8 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
                     keyboardType:
                         const TextInputType.numberWithOptions(decimal: true),
                     onChanged: (value) {
-                      print('Value: $value');
                       final cleanValue = value.replaceAll('\$', '');
                       final cleanValue2 = cleanValue.replaceAll(',', '');
-                      print('Clean Value: $cleanValue2');
                       if (cleanValue2.isNotEmpty) {
                         amount = double.parse(cleanValue2);
                       }
