@@ -15,8 +15,8 @@ class HeaderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formattedValue = value < 0
-        ? '-\$ ${value.abs().toStringAsFixed(2)}'
-        : '\$ ${value.toStringAsFixed(2)}';
+        ? '-€ ${value.abs().toStringAsFixed(2)}'
+        : '€ ${value.toStringAsFixed(2)}';
 
     return Expanded(
       child: Card(

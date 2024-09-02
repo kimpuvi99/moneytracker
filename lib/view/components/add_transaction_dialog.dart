@@ -17,7 +17,7 @@ class AddTransactionDialog extends StatefulWidget {
 class _AddTransactionDialogState extends State<AddTransactionDialog> {
   double amount = 0;
   String description = '';
-  TransactionType type = TransactionType.expense;
+  TransactionType type = TransactionType.income;
 
   @override
   Widget build(BuildContext context) {
@@ -81,16 +81,16 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
                 ),
                 TextField(
                     inputFormatters: [
-                      CurrencyTextInputFormatter.currency(symbol: '\$')
+                      CurrencyTextInputFormatter.currency(symbol: '€')
                     ],
                     autofocus: true,
                     textAlign: TextAlign.center,
                     decoration:
-                        const InputDecoration.collapsed(hintText: '\$0.00'),
+                        const InputDecoration.collapsed(hintText: '€ 0.00'),
                     keyboardType:
                         const TextInputType.numberWithOptions(decimal: true),
                     onChanged: (value) {
-                      final cleanValue = value.replaceAll('\$', '');
+                      final cleanValue = value.replaceAll('€', '');
                       final cleanValue2 = cleanValue.replaceAll(',', '');
                       if (cleanValue2.isNotEmpty) {
                         amount = double.parse(cleanValue2);

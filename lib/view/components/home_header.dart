@@ -34,7 +34,7 @@ class HomeHeader extends StatelessWidget {
                   .textTheme
                   .bodySmall!
                   .copyWith(color: Colors.white.withOpacity(0.5))),
-          Text('\$ ${balance.toStringAsFixed(2)}',
+          Text('€ ${balance.toStringAsFixed(2)}',
               style: Theme.of(context)
                   .textTheme
                   .headlineLarge!

@@ -27,8 +27,8 @@ class TransactionsList extends StatelessWidget {
                     ? 'Income'
                     : 'Expense';
                 final value = transaction.type == TransactionType.expense
-                    ? '-\$ ${transaction.amount.abs().toStringAsFixed(2)}'
-                    : '\$ ${transaction.amount.toStringAsFixed(2)}';
+                    ? '-€ ${transaction.amount.abs().toStringAsFixed(2)}'
+                    : '€ ${transaction.amount.toStringAsFixed(2)}';
                 final color = transaction.type == TransactionType.expense
                     ? Colors.red
                     : Colors.teal;
