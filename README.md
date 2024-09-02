@@ -5,6 +5,7 @@ The APP is divided in two pages:
   - Add Transaction: By clicking on the (+) button in the Overview page, you can add your transactions specifying if it is an income or an expense, the amount and a description.
 ![Overview](https://github.com/user-attachments/assets/3fc7b550-5057-41e6-ab9c-677a306088c6)
 I'll keep developing the APP to add more advanced features such as:
+
   - Creating the APP icon and name.
   - The option to edit or delete transactions.
   - Adding dates to the transactions so you can see your incomes/expenses by date (daily, weekly, monthly, yearly and total).
