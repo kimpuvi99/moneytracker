@@ -20,7 +20,6 @@ I'll keep developing the APP to add more advanced features such as:
   - 🔜  Implementing graphs to have a visual view of how the money is distributed.
   - 🔜  A sing in page where you can register or sing in with your google account.
   - 🔜  Improving the APP design.
-  - 🔜  Export to Excel.
-  - 🔜  Launching on PlayStore.
+  - 🔜  Export all the tranactions to an Excel file.
     
 I hope you liked it 😊
