@@ -26,4 +26,23 @@ class TransactionsProvider extends ChangeNotifier {
     _transactions.add(transaction);
     notifyListeners();
   }
+
+  void updateTransaction(String id, double newAmount, String newDescription, DateTime newDate) { // Add newDate as a parameter
+    final transactionIndex = _transactions.indexWhere((tx) => tx.id == id);
+    if (transactionIndex != -1) {
+      _transactions[transactionIndex] = Transaction(
+        id: id,
+        amount: newAmount,
+        description: newDescription,
+        type: _transactions[transactionIndex].type,
+        date: newDate, // Use the passed newDate
+      );
+      notifyListeners();
+    }
+  }
+
+  void deleteTransaction(String id) {
+    _transactions.removeWhere((transaction) => transaction.id == id);
+    notifyListeners();
+  }
 }

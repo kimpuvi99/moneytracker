@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:money_tracker/controller/transactions_provider.dart';
 import 'package:money_tracker/model/transaction.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
+import 'package:intl/intl.dart';
 
 class AddTransactionDialog extends StatefulWidget {
   const AddTransactionDialog({
@@ -18,39 +20,40 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
   double amount = 0;
   String description = '';
   TransactionType type = TransactionType.income;
+  DateTime? _selectedDate; // To store the selected date
+
+  // Function to show the date picker
+  void _presentDatePicker() {
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now(),
+    ).then((pickedDate) {
+      if (pickedDate == null) {
+        return;
+      }
+      setState(() {
+        _selectedDate = pickedDate;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 680,
+      height: 730, // Increased height to accommodate the date picker
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            margin: const EdgeInsets.only(top: 8),
-            height: 6,
-            width: 48,
-            decoration: BoxDecoration(
-                color: Colors.grey.shade300,
-                borderRadius: BorderRadius.circular(3)),
-          ),
-          Container(
-            padding: const EdgeInsets.all(20),
-            width: double.infinity,
-            child: const Text(
-              'New Transaction',
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.teal),
-              textAlign: TextAlign.center,
-            ),
-          ),
+          // ... (Your existing header code, if any)
+          const SizedBox(height: 40),
           Padding(
             padding: const EdgeInsets.all(12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                // Transaction Type Selector 
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: CupertinoSlidingSegmentedControl(
@@ -71,71 +74,120 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
                   ),
                 ),
                 const SizedBox(height: 20),
+
+                // Amount Input Field
                 Text(
                   'AMOUNT',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall!
-                      .copyWith(color: Colors.teal),
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.teal),
                   textAlign: TextAlign.center,
                 ),
                 TextField(
-                    inputFormatters: [
-                      CurrencyTextInputFormatter.currency(symbol: '€')
-                    ],
-                    autofocus: true,
-                    textAlign: TextAlign.center,
-                    decoration:
-                        const InputDecoration.collapsed(hintText: '€ 0.00'),
-                    keyboardType:
-                        const TextInputType.numberWithOptions(decimal: true),
-                    onChanged: (value) {
-                      final cleanValue = value.replaceAll('€', '');
-                      final cleanValue2 = cleanValue.replaceAll(',', '');
-                      if (cleanValue2.isNotEmpty) {
-                        amount = double.parse(cleanValue2);
-                      }
-                    }),
+                  inputFormatters: [
+                    CurrencyTextInputFormatter.currency(symbol: '€')
+                  ],
+                  autofocus: true,
+                  textAlign: TextAlign.center,
+                  decoration: const InputDecoration.collapsed(hintText: '€ 0.00'),
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  onChanged: (value) {
+                    final cleanValue = value.replaceAll('€', '').replaceAll(',', '');
+                    if (cleanValue.isNotEmpty) {
+                      amount = double.parse(cleanValue);
+                    }
+                  },
+                ),
+ //               const SizedBox(height: 20),
+
+                // Description Input Field
+                // Text(
+                //   'CATEGORY',
+                //   style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.teal),
+                //   textAlign: TextAlign.center,
+                // ),
+                // TextField(
+                //   textAlign: TextAlign.center,
+                //   decoration: const InputDecoration.collapsed(
+                //     hintText: 'Enter category here',
+                //     hintStyle: TextStyle(color: Colors.grey)
+                //   ),
+                //   keyboardType: TextInputType.text,
+                //   onChanged: (value) {
+                //     description = value;
+                //   },
+                // ),
                 const SizedBox(height: 20),
+
+                // Date Picker Field (Mejorado)
+                TextField(
+                  decoration: InputDecoration(
+                    labelText: 'Date',
+                    hintText: 'yyyy-MM-dd',                     
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0), 
+                      borderSide: BorderSide(color: Colors.grey[400]!), 
+                    ),
+                    filled: true,
+                    fillColor: Colors.grey[100], 
+                    prefixIcon: const Icon(Icons.calendar_today), 
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.arrow_drop_down), 
+                      onPressed: _presentDatePicker, 
+                    ),
+                  ),
+                  controller: TextEditingController(
+                    text: _selectedDate == null
+                        ? ''
+                        : DateFormat('yyyy-MM-dd').format(_selectedDate!),
+                  ),
+                  readOnly: true,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500, 
+                  ),
+                ),
+                const SizedBox(height: 20),
+
+                // Description Input Field
                 Text(
                   'DESCRIPTION',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall!
-                      .copyWith(color: Colors.teal),
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.teal),
                   textAlign: TextAlign.center,
                 ),
                 TextField(
                   textAlign: TextAlign.center,
                   decoration: const InputDecoration.collapsed(
-                      hintText: 'Enter description here',
-                      hintStyle: TextStyle(color: Colors.grey)),
+                    hintText: 'Enter description here',
+                    hintStyle: TextStyle(color: Colors.grey)
+                  ),
                   keyboardType: TextInputType.text,
                   onChanged: (value) {
                     description = value;
                   },
                 ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                    style:
-                        ElevatedButton.styleFrom(backgroundColor: Colors.teal),
-                    onPressed: () {
-                      // Add transaction
-                      final transaction = Transaction(
-                        type: type,
-                        amount:
-                            type == TransactionType.expense ? -amount : amount,
-                        description: description,
-                      );
+                const SizedBox(height: 20),                
 
-                      Provider.of<TransactionsProvider>(context, listen: false)
-                          .addTransaction(transaction);
-                      Navigator.pop(context);
-                    },
-                    child: const Text(
-                      'Save',
-                      style: TextStyle(color: Colors.white),
-                    ))
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.teal),
+                  onPressed: () {
+                    String newId = const Uuid().v4(); 
+
+                    final transaction = Transaction(
+                      id: newId, 
+                      type: type,
+                      amount: type == TransactionType.expense ? -amount : amount,
+                      description: description,
+                      date: _selectedDate ?? DateTime.now(), 
+                    );
+
+                    Provider.of<TransactionsProvider>(context, listen: false)
+                        .addTransaction(transaction);
+                    Navigator.pop(context); 
+                  }, 
+                  child: const Text(
+                    'Save',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ) 
               ],
             ),
           ),
@@ -144,3 +196,4 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
     );
   }
 }
+

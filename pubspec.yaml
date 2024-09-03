@@ -28,6 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  uuid: ^3.0.6  # Or the latest version
   cupertino_icons: ^1.0.6
   currency_text_input_formatter: ^2.2.3
   flutter:

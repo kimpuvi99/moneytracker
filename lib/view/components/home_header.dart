@@ -23,17 +23,11 @@ class HomeHeader extends StatelessWidget {
       child: Column(
         children: [
           const SizedBox(height: 12),
-          Text(
-            'MONEY TRACKER',
-            style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                color: Colors.teal.shade900, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 12),
-          Text('Balance:',
+          Text('Balance',
               style: Theme.of(context)
                   .textTheme
-                  .bodySmall!
-                  .copyWith(color: Colors.white.withOpacity(0.5))),
+                  .bodyMedium!
+                  .copyWith(color: Colors.white, fontWeight: FontWeight.w500)),
           Text('€ ${balance.toStringAsFixed(2)}',
               style: Theme.of(context)
                   .textTheme
@@ -51,7 +45,7 @@ class HomeHeader extends StatelessWidget {
                   title: 'Incomes',
                   value: incomes,
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 15),
                 HeaderCard(
                   icon: const Icon(
                     Icons.money_off,
