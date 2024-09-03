@@ -3,6 +3,7 @@ This is a simple flutter Android APP to track your incomes and expenses.
 At the moment, the APP is divided in two pages:
   - ✔️ Home Page Screen: Where you can see your total balance, incomes, expenses and every transaction you added.
   - ✔️ Add Transaction Screen: By clicking on the (+) button in the Home Page Screen, you can add your transactions specifying:
+    
           - Income or Expense.
           - Amount.
           - Date.
