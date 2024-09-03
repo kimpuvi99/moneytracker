@@ -6,6 +6,8 @@ At the moment, the APP is divided in two pages:
     
     - Expense or Income.
     - Amount.
+    - 🔜  Account.
+    - 🔜  Category.
     - Date.
     - Description.
 ![Overview](https://github.com/user-attachments/assets/3f8e0769-01a0-4cb0-88fb-bdbdc07d4986)
