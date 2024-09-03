@@ -4,10 +4,10 @@ At the moment, the APP is divided in two pages:
   - ✔️ Home Screen: Where you can see your total balance, incomes, expenses and every transaction you added.
   - ✔️ Add Transaction Screen: By clicking on the (+) button in the Home Screen, you can add your transactions specifying:
     
-          - Expense or Income.
-          - Amount.
-          - Date.
-          - Description.
+    - Expense or Income.
+    - Amount.
+    - Date.
+    - Description.
 ![Overview](https://github.com/user-attachments/assets/3f8e0769-01a0-4cb0-88fb-bdbdc07d4986)
 I'll keep developing the APP to add more advanced features such as:
 
