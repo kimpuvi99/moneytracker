@@ -1,8 +1,8 @@
 # moneytracker
 This is a simple flutter Android APP to track your incomes and expenses.
 At the moment, the APP is divided in two pages:
-  - ✔️ Overview: Where you can see your total balance, total incomes, total expenses and every single transaction you have added.
-  - ✔️ Add Transaction: By clicking on the (+) button in the Overview page, you can add your transactions specifying if it is an income or an expense, the amount and a description.
+  - ✔️ Home Page Screen: Where you can see your total balance, total incomes, total expenses and every single transaction you have added.
+  - ✔️ Add Transaction Screen: By clicking on the (+) button in the Overview page, you can add your transactions specifying if it is an income or an expense, the amount and a description.
 ![Overview](https://github.com/user-attachments/assets/3fc7b550-5057-41e6-ab9c-677a306088c6)
 I'll keep developing the APP to add more advanced features such as:
 
