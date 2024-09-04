@@ -1,17 +1,28 @@
 enum TransactionType { income, expense }
 
 class Transaction {
-  final String id; // Add the id property
+  final String id; 
   final TransactionType type;
   final double amount;
   final String description;
   final DateTime date;
 
   Transaction({
-    required this.id, // Make id a required positional parameter
+    required this.id, 
     required this.type,
     required this.amount,
     required this.description,
     required this.date,
-  }); // Remove the ID generation from the constructor 
+  }); 
+
+  // Add the toMap() method:
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'type': type.toString(), // Convert enum to string for database
+      'amount': amount,
+      'description': description,
+      'date': date.millisecondsSinceEpoch, // Store date as milliseconds 
+    };
+  }
 }

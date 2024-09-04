@@ -22,11 +22,10 @@ class HomeHeader extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const SizedBox(height: 12),
           Text('Balance',
               style: Theme.of(context)
                   .textTheme
-                  .bodyMedium!
+                  .bodyLarge!
                   .copyWith(color: Colors.white, fontWeight: FontWeight.w500)),
           Text('€ ${balance.toStringAsFixed(2)}',
               style: Theme.of(context)

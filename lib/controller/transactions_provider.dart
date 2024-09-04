@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:money_tracker/model/transaction.dart';
+import 'package:money_tracker/database/transaction_database.dart'; // Import for database
 
 class TransactionsProvider extends ChangeNotifier {
-  final List<Transaction> _transactions = [];
+  List<Transaction> _transactions = []; // Changed to non-final
 
   List<Transaction> get transactions => _transactions;
 
@@ -27,7 +28,7 @@ class TransactionsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateTransaction(String id, double newAmount, String newDescription, DateTime newDate) { // Add newDate as a parameter
+  void updateTransaction(String id, double newAmount, String newDescription, DateTime newDate) { 
     final transactionIndex = _transactions.indexWhere((tx) => tx.id == id);
     if (transactionIndex != -1) {
       _transactions[transactionIndex] = Transaction(
@@ -35,14 +36,27 @@ class TransactionsProvider extends ChangeNotifier {
         amount: newAmount,
         description: newDescription,
         type: _transactions[transactionIndex].type,
-        date: newDate, // Use the passed newDate
+        date: newDate, 
       );
       notifyListeners();
     }
   }
 
-  void deleteTransaction(String id) {
+  // Método modificado para borrar de la base de datos
+  void deleteTransaction(String id) async {
+    // 1. Borra la transacción de la base de datos
+    await TransactionDatabase.instance.deleteTransaction(id); 
+
+    // 2. Borra la transacción de la lista en memoria
     _transactions.removeWhere((transaction) => transaction.id == id);
+
+    // 3. Notifica a los oyentes del cambio
+    notifyListeners();
+  }
+
+  // Method to fetch transactions from the database
+  Future<void> fetchTransactions() async {
+    _transactions = await TransactionDatabase.instance.getTransactions();
     notifyListeners();
   }
 }

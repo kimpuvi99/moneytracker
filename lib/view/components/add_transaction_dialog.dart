@@ -1,4 +1,3 @@
-import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:money_tracker/controller/transactions_provider.dart';
@@ -6,6 +5,8 @@ import 'package:money_tracker/model/transaction.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart';
+import 'package:money_tracker/database/transaction_database.dart'; 
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';// Adjust the path if needed
 
 class AddTransactionDialog extends StatefulWidget {
   const AddTransactionDialog({
@@ -19,10 +20,10 @@ class AddTransactionDialog extends StatefulWidget {
 class _AddTransactionDialogState extends State<AddTransactionDialog> {
   double amount = 0;
   String description = '';
-  TransactionType type = TransactionType.income;
-  DateTime? _selectedDate; // To store the selected date
+  TransactionType
+ type = TransactionType.income;
+  DateTime? _selectedDate; 
 
-  // Function to show the date picker
   void _presentDatePicker() {
     showDatePicker(
       context: context,
@@ -42,11 +43,10 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 730, // Increased height to accommodate the date picker
+      height: 730,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // ... (Your existing header code, if any)
           const SizedBox(height: 40),
           Padding(
             padding: const EdgeInsets.all(12),
@@ -58,7 +58,8 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: CupertinoSlidingSegmentedControl(
                     children: const {
-                      0: Text('Expense'),
+                      0:
+ Text('Expense'),
                       1: Text('Income'),
                     },
                     onValueChanged: (int? index) {
@@ -96,28 +97,47 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
                     }
                   },
                 ),
- //               const SizedBox(height: 20),
-
-                // Description Input Field
-                // Text(
-                //   'CATEGORY',
-                //   style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.teal),
-                //   textAlign: TextAlign.center,
-                // ),
-                // TextField(
-                //   textAlign: TextAlign.center,
-                //   decoration: const InputDecoration.collapsed(
-                //     hintText: 'Enter category here',
-                //     hintStyle: TextStyle(color: Colors.grey)
-                //   ),
-                //   keyboardType: TextInputType.text,
-                //   onChanged: (value) {
-                //     description = value;
-                //   },
-                // ),
+               
+                const SizedBox(height: 20),
+              
+                Text(
+                  'ACCOUNT',
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.teal),
+                  textAlign: TextAlign.center,
+                ),
+                const TextField(
+                  textAlign: TextAlign.center,
+                  decoration: InputDecoration.collapsed(
+                    hintText: 'Select Account',
+                    hintStyle: TextStyle(color: Colors.grey)
+                  ),
+                  keyboardType: TextInputType.text,
+  //                onChanged: (value) {
+ //                   description = value;
+ //                 },
+                ),
+                
+                const SizedBox(height: 20),
+                
+                Text(
+                  'CATEGORY',
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.teal),
+                  textAlign: TextAlign.center,
+                ),
+                const TextField(
+                  textAlign: TextAlign.center,
+                  decoration: InputDecoration.collapsed(
+                    hintText: 'Select Category',
+                    hintStyle: TextStyle(color: Colors.grey)
+                  ),
+                  keyboardType: TextInputType.text,
+                  // onChanged: (value) {
+                  //   description = value;
+                  // },
+                ),
                 const SizedBox(height: 20),
 
-                // Date Picker Field (Mejorado)
+                // Date Picker Field 
                 TextField(
                   decoration: InputDecoration(
                     labelText: 'Date',
@@ -148,7 +168,7 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
                 const SizedBox(height: 20),
 
                 // Description Input Field
-                Text(
+               Text(
                   'DESCRIPTION',
                   style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.teal),
                   textAlign: TextAlign.center,
@@ -164,11 +184,12 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
                     description = value;
                   },
                 ),
-                const SizedBox(height: 20),                
+
+                const SizedBox(height: 30),
 
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.teal),
-                  onPressed: () {
+                  onPressed: () async { 
                     String newId = const Uuid().v4(); 
 
                     final transaction = Transaction(
@@ -179,15 +200,17 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
                       date: _selectedDate ?? DateTime.now(), 
                     );
 
+                    // Save to the database 
+                    await TransactionDatabase.instance.insertTransaction(transaction); 
+
+                    // Update TransactionsProvider 
                     Provider.of<TransactionsProvider>(context, listen: false)
                         .addTransaction(transaction);
+
                     Navigator.pop(context); 
-                  }, 
-                  child: const Text(
-                    'Save',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ) 
+                  },
+                  child: const Text('Add Transaction', style: TextStyle(color: Colors.white),),
+                ),
               ],
             ),
           ),
@@ -196,4 +219,3 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
     );
   }
 }
-
