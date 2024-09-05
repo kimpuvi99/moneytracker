@@ -32,7 +32,7 @@ class _CategoriesScreenState extends
               onPressed: () {
                 _showCreateCategoryDialog(context);
               },
-              child: const Text('Crear Categoría'),
+              child: const Text('Add Category'),
             ),
             // Aquí mostramos la lista de categorías
             Expanded(
@@ -58,19 +58,19 @@ class _CategoriesScreenState extends
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Crear Categoría'),
+          title: const Text('Add Category'),
           content: TextField(
             onChanged: (value) {
               newCategory = value;
             },
-            decoration: const InputDecoration(hintText: 'Nombre de la categoría'),
+            decoration: const InputDecoration(hintText: 'Category name'),
           ),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Cancelar'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
@@ -80,7 +80,7 @@ class _CategoriesScreenState extends
                 });
                 Navigator.of(context).pop();
               },
-              child: const Text('Crear'),
+              child: const Text('Add'),
             ),
           ],
         );
