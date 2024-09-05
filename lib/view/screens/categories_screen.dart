@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -8,14 +9,13 @@ class CategoriesScreen extends StatefulWidget {
   State<CategoriesScreen> createState() => _CategoriesScreenState();
 }
 
-class _CategoriesScreenState extends
- State<CategoriesScreen> {
+class _CategoriesScreenState extends State<CategoriesScreen> {
   List<String> categories = [];
 
   @override
   void initState() {
     super.initState();
-    _loadCategories(); // Cargar categorías al iniciar la pantalla
+    _loadCategories(); 
   }
 
   @override
@@ -26,16 +26,11 @@ class _CategoriesScreenState extends
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            ElevatedButton(
-              onPressed: () {
-                _showCreateCategoryDialog(context);
-              },
-              child: const Text('Add Category'),
-            ),
-            // Aquí mostramos la lista de categorías
-            Expanded(
+            // Give the list more space using Flexible
+            Flexible(
+              flex: 100, // Takes up twice as much space as the button
               child: ListView.builder(
                 itemCount: categories.length,
                 itemBuilder: (context, index) {
@@ -44,6 +39,13 @@ class _CategoriesScreenState extends
                   );
                 },
               ),
+            ),
+            // Then the "Add Category" button
+            ElevatedButton(
+              onPressed: () {
+                _showCreateCategoryDialog(context);
+              },
+              child: const Text('Add Category'),
             ),
           ],
         ),
@@ -76,7 +78,7 @@ class _CategoriesScreenState extends
               onPressed: () {
                 setState(() {
                   categories.add(newCategory);
-                  _saveCategories(); // Guardar categorías después de agregar una nueva
+                  _saveCategories(); 
                 });
                 Navigator.of(context).pop();
               },
@@ -98,7 +100,7 @@ class _CategoriesScreenState extends
   Future<void> _loadCategories() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      categories = prefs.getStringList('categories') ?? []; // Si no hay categorías guardadas, inicializar con una lista vacía
+      categories = prefs.getStringList('categories') ?? []; 
     });
   }
 }
