@@ -2,7 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class CategoriesScreen extends StatefulWidget {
+class CategoriesScreen
+ extends StatefulWidget {
   const CategoriesScreen({super.key});
 
   @override
@@ -14,8 +15,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
 
   @override
   void initState() {
+
     super.initState();
-    _loadCategories(); 
+    _loadCategories();
   }
 
   @override
@@ -24,31 +26,28 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       appBar: AppBar(
         title: const Text('Categories'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            // Give the list more space using Flexible
-            Flexible(
-              flex: 100, // Takes up twice as much space as the button
-              child: ListView.builder(
-                itemCount: categories.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(categories[index]),
-                  );
-                },
-              ),
-            ),
-            // Then the "Add Category" button
-            ElevatedButton(
+      body: Stack(
+        children: [
+          ListView.builder(
+            itemCount: categories.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Text(categories[index]),
+              );
+            },
+          ),
+          Positioned(
+            bottom: 16.0,
+            left: 16.0,
+            right: 16.0,
+            child: ElevatedButton(
               onPressed: () {
                 _showCreateCategoryDialog(context);
               },
               child: const Text('Add Category'),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -78,7 +77,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
               onPressed: () {
                 setState(() {
                   categories.add(newCategory);
-                  _saveCategories(); 
+                  _saveCategories();
                 });
                 Navigator.of(context).pop();
               },
@@ -90,17 +89,15 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     );
   }
 
-  // Función para guardar las categorías en Shared Preferences
   Future<void> _saveCategories() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setStringList('categories', categories);
   }
 
-  // Función para cargar las categorías desde Shared Preferences
   Future<void> _loadCategories() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      categories = prefs.getStringList('categories') ?? []; 
+      categories = prefs.getStringList('categories') ?? [];
     });
   }
 }
