@@ -23,12 +23,12 @@ class TransactionsProvider extends ChangeNotifier {
     return getTotalIncomes() + getTotalExpenses();
   }
 
-  void addTransaction(Transaction transaction) {
+  void addTransaction(Transaction transaction, String category) { // Añadido category como parámetro
     _transactions.add(transaction);
     notifyListeners();
   }
 
-  void updateTransaction(String id, double newAmount, String newDescription, DateTime newDate) { 
+  void updateTransaction(String id, double newAmount, String newDescription, DateTime newDate, String newCategory) {  // Añadido newCategory como parámetro
     final transactionIndex = _transactions.indexWhere((tx) => tx.id == id);
     if (transactionIndex != -1) {
       _transactions[transactionIndex] = Transaction(
@@ -36,7 +36,8 @@ class TransactionsProvider extends ChangeNotifier {
         amount: newAmount,
         description: newDescription,
         type: _transactions[transactionIndex].type,
-        date: newDate, 
+        date: newDate,
+        category: newCategory,  // Usado newCategory aquí
       );
       notifyListeners();
     }

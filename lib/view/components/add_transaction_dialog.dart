@@ -5,8 +5,10 @@ import 'package:money_tracker/model/transaction.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart';
-import 'package:money_tracker/database/transaction_database.dart'; 
-import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';// Adjust the path if needed
+import 'package:money_tracker/database/transaction_database.dart';
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart'; 
+import 'package:money_tracker/view/screens/categories_screen.dart'; // Asegúrate de importar categories_screen.dart
+
 
 class AddTransactionDialog extends StatefulWidget {
   const AddTransactionDialog({
@@ -18,11 +20,12 @@ class AddTransactionDialog extends StatefulWidget {
 }
 
 class _AddTransactionDialogState extends State<AddTransactionDialog> {
-  double amount = 0;
+  double
+ amount = 0;
   String description = '';
-  TransactionType
- type = TransactionType.income;
+  TransactionType type = TransactionType.income;
   DateTime? _selectedDate; 
+  String selectedCategory = CategoriesScreen.getCategories().isNotEmpty ? CategoriesScreen.getCategories()[0] : '';
 
   void _presentDatePicker() {
     showDatePicker(
@@ -53,13 +56,12 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Transaction Type Selector 
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: const
+ EdgeInsets.symmetric(horizontal: 16.0),
                   child: CupertinoSlidingSegmentedControl(
                     children: const {
-                      0:
- Text('Expense'),
+                      0: Text('Expense'),
                       1: Text('Income'),
                     },
                     onValueChanged: (int? index) {
@@ -76,7 +78,6 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
                 ),
                 const SizedBox(height: 20),
 
-                // Amount Input Field
                 Text(
                   'AMOUNT',
                   style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.teal),
@@ -112,9 +113,6 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
                     hintStyle: TextStyle(color: Colors.grey)
                   ),
                   keyboardType: TextInputType.text,
-  //                onChanged: (value) {
- //                   description = value;
- //                 },
                 ),
                 
                 const SizedBox(height: 20),
@@ -124,16 +122,19 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
                   style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.teal),
                   textAlign: TextAlign.center,
                 ),
-                const TextField(
-                  textAlign: TextAlign.center,
-                  decoration: InputDecoration.collapsed(
-                    hintText: 'Select Category',
-                    hintStyle: TextStyle(color: Colors.grey)
-                  ),
-                  keyboardType: TextInputType.text,
-                  // onChanged: (value) {
-                  //   description = value;
-                  // },
+                DropdownButton<String>(
+                  value: selectedCategory,
+                  items: CategoriesScreen.getCategories().map((String category) {
+                    return DropdownMenuItem(
+                      value: category,
+                      child: Text(category),
+                    );
+                  }).toList(),
+onChanged: (String? newValue) {
+                    setState(() {
+                      selectedCategory = newValue!;
+                    });
+                  },
                 ),
                 const SizedBox(height: 20),
 
@@ -142,7 +143,8 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
                   decoration: InputDecoration(
                     labelText: 'Date',
                     hintText: 'yyyy-MM-dd',                     
-                    border: OutlineInputBorder(
+                    border:
+ OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0), 
                       borderSide: BorderSide(color: Colors.grey[400]!), 
                     ),
@@ -198,14 +200,14 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
                       amount: type == TransactionType.expense ? -amount : amount,
                       description: description,
                       date: _selectedDate ?? DateTime.now(), 
+                      category: selectedCategory,
                     );
 
                     // Save to the database 
-                    await TransactionDatabase.instance.insertTransaction(transaction); 
+                    await TransactionDatabase.instance.insertTransaction(transaction, selectedCategory); 
 
                     // Update TransactionsProvider 
-                    Provider.of<TransactionsProvider>(context, listen: false)
-                        .addTransaction(transaction);
+                    Provider.of<TransactionsProvider>(context, listen: false).addTransaction(transaction, selectedCategory); 
 
                     Navigator.pop(context); 
                   },

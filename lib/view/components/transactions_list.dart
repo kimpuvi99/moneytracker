@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_tracker/controller/transactions_provider.dart';
 import 'package:money_tracker/model/transaction.dart';
+import 'package:money_tracker/view/screens/categories_screen.dart'; // Asegúrate de importar categories_screen.dart
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -9,23 +10,23 @@ class TransactionsList extends StatelessWidget {
 
   void _showEditTransactionDialog(BuildContext context, Transaction transaction) {
     final amountController = TextEditingController(text: transaction.amount.toStringAsFixed(2));
-//    final categoryController = TextEditingController(text: transaction.description);
     final descriptionController = TextEditingController(text: transaction.description);
-    DateTime selectedDate = transaction.date; 
+    DateTime selectedDate = transaction.date;
+    String newCategory = transaction.category; // Inicializa con la categoría actual
     final dateController = TextEditingController(text: DateFormat('yyyy-MM-dd').format(selectedDate));
 
     void presentDatePicker() {
+
       showDatePicker(
         context: context,
-        
-initialDate: selectedDate,
+        initialDate: selectedDate,
         firstDate: DateTime(2000),
         lastDate: DateTime.now(),
       ).then((pickedDate) {
         if (pickedDate == null) {
           return;
         }
-        selectedDate = pickedDate; 
+        selectedDate = pickedDate;
         dateController.text = DateFormat('yyyy-MM-dd').format(selectedDate);
       });
     }
@@ -38,59 +39,65 @@ initialDate: selectedDate,
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Campo para editar la cantidad
               TextField(
                 decoration: const InputDecoration(labelText: 'Amount'),
                 controller: amountController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
               ),
-              // Campo para editar la descripción
-              // TextField(
-              //   decoration: const InputDecoration(labelText: 'Category'),
-              //   controller: categoryController,
-//              ),
-              // Campo para editar la fecha
               TextField(
                 decoration: const InputDecoration(labelText: 'Date'),
-                controller: dateController,              
+                controller: dateController,
                 readOnly: true,
                 onTap: presentDatePicker,
               ),
-              // Campo para editar la descripción
               TextField(
                 decoration: const InputDecoration(labelText: 'Description'),
                 controller: descriptionController,
-              ),              
+
+              ),
+              DropdownButton<String>(
+                value: newCategory,
+                items: CategoriesScreen.getCategories().map((String category) {
+                  return DropdownMenuItem(
+                    value: category,
+                    child: Text(category),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  if (newValue != null) {
+                    newCategory = newValue;
+                  }
+                },
+              ),
             ],
           ),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Cerrar el diálogo
+                Navigator.of(context).pop();
               },
               child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
-                // Eliminar la transacción
                 Provider.of<TransactionsProvider>(context, listen: false)
                     .deleteTransaction(transaction.id);
-                Navigator.of(context).pop(); // Cerrar el diálogo
+                Navigator.of(context).pop();
               },
               child: const Text('Delete'),
             ),
             TextButton(
               onPressed: () {
-                // Guardar cambios
                 final updatedAmount = double.tryParse(amountController.text) ?? 0.0;
                 Provider.of<TransactionsProvider>(context, listen: false)
                     .updateTransaction(
-                  transaction.id,
-                  updatedAmount,
-                  descriptionController.text,
-                  selectedDate, 
-                );
-                Navigator.of(context).pop(); // Cerrar el diálogo
+                      transaction.id,
+                      updatedAmount,
+                      descriptionController.text,
+                      selectedDate,
+                      newCategory, // Pasa la nueva categoría
+                    );
+                Navigator.of(context).pop();
               },
               child: const Text('Save'),
             ),

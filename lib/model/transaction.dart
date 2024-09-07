@@ -6,6 +6,7 @@ class Transaction {
   final double amount;
   final String description;
   final DateTime date;
+  final String category;
 
   Transaction({
     required this.id, 
@@ -13,6 +14,7 @@ class Transaction {
     required this.amount,
     required this.description,
     required this.date,
+    required this.category,
   }); 
 
   // Add the toMap() method:

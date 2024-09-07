@@ -1,5 +1,6 @@
 import 'package:money_tracker/model/transaction.dart';
 import 'package:sqflite/sqflite.dart';
+
 import 'package:path/path.dart';
 import 'package:money_tracker/model/transaction.dart' as myTransaction;
 
@@ -8,6 +9,7 @@ class TransactionDatabase {
   static Database? _database;
 
   TransactionDatabase._init();
+
 
   Future<Database> get database async {
     if (_database != null) return _database!;
@@ -25,7 +27,8 @@ class TransactionDatabase {
             type TEXT, 
             amount REAL,
             description TEXT,
-            date INTEGER 
+            date TEXT,
+            category TEXT 
           )
         ''');
       },
@@ -34,13 +37,20 @@ class TransactionDatabase {
     return _database!;
   }
 
-  Future<void> insertTransaction(myTransaction.Transaction transaction) async {
+  Future<void> insertTransaction(myTransaction.Transaction transaction, String category) async { // Añade el parámetro category
     final db = await instance.database;
     try {
-      await db.insert('transactions', transaction.toMap());
+      await db.insert('transactions', {
+        'id': transaction.id,
+        'type': transaction.type.name, 
+        'amount': transaction.amount,
+        'description': transaction.description,
+        'date': transaction.date.toIso8601String(),
+        'category': category, // Usa el parámetro category aquí
+      });
     } catch (e) {
       // Manejo de errores: registra el error o muestra un mensaje al usuario
- //     print('Error al insertar transacción: $e');
+      print('Error al insertar transacción: $e');
     }
   }
 
@@ -55,19 +65,20 @@ class TransactionDatabase {
           type: _parseTransactionType(maps[i]['type']),
           amount: maps[i]['amount'],
           description: maps[i]['description'],
-          date: DateTime.fromMillisecondsSinceEpoch(maps[i]['date']),
+          date: DateTime.parse(maps[i]['date']),
+          category: maps[i]['category'],
         );
       });
     } catch (e) {
       // Manejo de errores: registra el error o muestra un mensaje al usuario
-//      print('Error al obtener transacciones: $e');
+      print('Error al obtener transacciones: $e');
       return []; // Devuelve una lista vacía en caso de error
     }
   }
 
   // Helper function to parse TransactionType from string
   TransactionType _parseTransactionType(String typeString) {
-    if (typeString.contains('TransactionType.expense')) {
+    if (typeString == 'expense') { 
       return TransactionType.expense;
     } else {
       return TransactionType.income;
@@ -80,7 +91,7 @@ class TransactionDatabase {
     try {
       await db.delete('transactions', where: 'id = ?', whereArgs: [id]);
     } catch (e) {
- //     print('Error al borrar transacción: $e');
+      print('Error al borrar transacción: $e');
     }
   }
 

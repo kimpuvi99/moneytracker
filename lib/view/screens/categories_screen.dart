@@ -1,21 +1,22 @@
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class CategoriesScreen
- extends StatefulWidget {
+class CategoriesScreen extends StatefulWidget {
   const CategoriesScreen({super.key});
 
   @override
   State<CategoriesScreen> createState() => _CategoriesScreenState();
+
+  static List<String> getCategories() {
+    return _CategoriesScreenState.categories; 
+  }
 }
 
 class _CategoriesScreenState extends State<CategoriesScreen> {
-  List<String> categories = [];
+  static List<String> categories = []; // Ahora es static
 
   @override
   void initState() {
-
     super.initState();
     _loadCategories();
   }
