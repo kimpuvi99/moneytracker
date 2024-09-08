@@ -1,26 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-class CategoriesScreen extends StatefulWidget {
+class CategoriesScreen
+ extends StatefulWidget {
   const CategoriesScreen({super.key});
-
   @override
   State<CategoriesScreen> createState() => _CategoriesScreenState();
-
   static List<String> getCategories() {
-    return _CategoriesScreenState.categories; 
+    return _CategoriesScreenState.categories;
   }
 }
-
-class _CategoriesScreenState extends State<CategoriesScreen> {
-  static List<String> categories = []; // Ahora es static
-
+class _CategoriesScreenState extends State<
+CategoriesScreen> {
+  static List<String> categories = [];
   @override
   void initState() {
     super.initState();
     _loadCategories();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,6 +30,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
             itemBuilder: (context, index) {
               return ListTile(
                 title: Text(categories[index]),
+                onTap: () {
+                  _showOptionsDialog(context, index);
+                },
               );
             },
           ),
@@ -52,10 +51,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       ),
     );
   }
-
   void _showCreateCategoryDialog(BuildContext context) {
     String newCategory = '';
-
     showDialog(
       context: context,
       builder: (context) {
@@ -83,6 +80,74 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                 Navigator.of(context).pop();
               },
               child: const Text('Add'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+  void _showOptionsDialog(BuildContext context, int index) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Options'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _showEditCategoryDialog(context, index);
+                },
+                child: const Text('Edit'),
+              ),
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    categories.removeAt(index);
+                    _saveCategories();
+                  });
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Delete'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+  void _showEditCategoryDialog(BuildContext context, int index) {
+    String editedCategory = categories[index];
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Edit Category'),
+          content: TextField(
+            onChanged: (value) {
+              editedCategory = value;
+            },
+            controller: TextEditingController(text: editedCategory),
+            decoration: const InputDecoration(hintText: 'Category name'),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  categories[index] = editedCategory;
+                  _saveCategories();
+                });
+                Navigator.of(context).pop();
+              },
+              child: const Text('Save'),
             ),
           ],
         );
