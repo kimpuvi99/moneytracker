@@ -49,8 +49,6 @@ class TransactionDatabase {
         'category': category, // Usa el parámetro category aquí
       });
     } catch (e) {
-      // Manejo de errores: registra el error o muestra un mensaje al usuario
-      print('Error al insertar transacción: $e');
     }
   }
 

@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-class CategoriesScreen
- extends StatefulWidget {
+
+class CategoriesScreen extends StatefulWidget {
   const CategoriesScreen({super.key});
   @override
   State<CategoriesScreen> createState() => _CategoriesScreenState();
   static List<String> getCategories() {
+
     return _CategoriesScreenState.categories;
   }
 }
-class _CategoriesScreenState extends State<
-CategoriesScreen> {
+
+class _CategoriesScreenState extends State<CategoriesScreen> {
   static List<String> categories = [];
   @override
   void initState() {
     super.initState();
     _loadCategories();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,12 +29,30 @@ CategoriesScreen> {
         children: [
           ListView.builder(
             itemCount: categories.length,
-            itemBuilder: (context, index) {
+            itemBuilder: (context,
+ index) {
               return ListTile(
                 title: Text(categories[index]),
-                onTap: () {
-                  _showOptionsDialog(context, index);
-                },
+                trailing: PopupMenuButton<String>(
+                  onSelected: (String choice) {
+                    if (choice == 'edit') {
+                      _showEditCategoryDialog(context, index);
+                    } else if (choice == 'delete') {
+                      setState(() {
+                        categories.removeAt(index);
+                        _saveCategories();
+                      });
+                    }
+                  },
+                  itemBuilder: (BuildContext context) {
+                    return {'edit', 'delete'}.map((String choice) {
+                      return PopupMenuItem<String>(
+                        value: choice,
+                        child: Text(choice),
+                      );
+                    }).toList();
+                  },
+                ),
               );
             },
           ),
@@ -51,6 +71,7 @@ CategoriesScreen> {
       ),
     );
   }
+
   void _showCreateCategoryDialog(BuildContext context) {
     String newCategory = '';
     showDialog(
@@ -86,38 +107,7 @@ CategoriesScreen> {
       },
     );
   }
-  void _showOptionsDialog(BuildContext context, int index) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Options'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  _showEditCategoryDialog(context, index);
-                },
-                child: const Text('Edit'),
-              ),
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    categories.removeAt(index);
-                    _saveCategories();
-                  });
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Delete'),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+
   void _showEditCategoryDialog(BuildContext context, int index) {
     String editedCategory = categories[index];
     showDialog(
